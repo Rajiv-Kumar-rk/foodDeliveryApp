@@ -4,7 +4,7 @@ import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MenuItem } from '../../../types';
 
-export default function OrderScreen() {
+export default function PlaceOrderScreen() {
   const router = useRouter();
   const { order: orderParam } = useLocalSearchParams<{ order: string }>();
   const order: MenuItem[] = JSON.parse(orderParam || '[]');
@@ -14,7 +14,7 @@ export default function OrderScreen() {
   const placeOrder = () => {
     // Simulating order placement
     alert('Order placed successfully!');
-    router.back();
+    router.push('/menu');
   };
 
   return (
