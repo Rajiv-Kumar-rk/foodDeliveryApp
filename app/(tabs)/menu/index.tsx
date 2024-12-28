@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import MenuItem from '../../../components/MenuItem';
-import { usePathname, useRouter } from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockMenuItems } from '../../../mockData';
 import { MenuItem as MenuItemType } from '../../../types';
 import SharedHeader from '../../../components/SharedHeader';

@@ -6,6 +6,7 @@ import { MenuItem } from '../../types';
 import { theme } from '../../styles/theme';
 import { Ionicons } from '@expo/vector-icons';
 import useCustomHeader from '@/hooks/useCustomHeader';
+import { CommonActions } from '@react-navigation/native';
 
 export default function PlaceOrderScreen() {
   const pathname = usePathname();
@@ -15,7 +16,8 @@ export default function PlaceOrderScreen() {
   const { order: orderParam } = useLocalSearchParams<{ order: string }>();
   const order: MenuItem[] = JSON.parse(orderParam || '[]');
 
-  useCustomHeader({title: "Cart", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
+  const navigation = useNavigation();
+  useCustomHeader({title: "Cart1", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
   // const navigation = useNavigation();
   // useEffect(()=> {
   //   navigation.setOptions({
@@ -44,15 +46,34 @@ export default function PlaceOrderScreen() {
 
   const totalPrice = order.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
+  const resetCurrentNavigationStack = () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0, 
+        routes: [
+          {
+            name: '(tabs)', 
+            state: {
+              index: 0, 
+              routes: [
+                { name: 'order' },
+              ],
+            },
+          },
+        ],
+      })
+    );
+  };
+
   const placeOrder = () => {
     // Simulating order placement
     alert('Order placed successfully!');
-    router.push('/order');
+    // router.push('/menu');
+    resetCurrentNavigationStack();
   };
 
   return (
     <View style={styles.container}>
-      {/* <CustomHeader title="Cart" /> */}
       <FlatList
         data={order}
         renderItem={({ item }) => (

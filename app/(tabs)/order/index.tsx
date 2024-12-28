@@ -20,11 +20,11 @@ export default function OrderHistoryScreen() {
         // headerBackImage: () => (
         //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
         // ),
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          </TouchableOpacity>
-        ),
+        // headerLeft: () => (
+        //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+        //     <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+        //   </TouchableOpacity>
+        // ),
         headerStyle: {
           backgroundColor: theme.colors.surface, 
         },
