@@ -24,11 +24,11 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
         />
       </View>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={theme.colors.textLight} style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search for food..."
-          placeholderTextColor={theme.colors.textLight}
+          placeholderTextColor={theme.colors.textSecondary}
         />
       </View>
     </View>
@@ -37,10 +37,10 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.surface,
     padding: theme.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.secondary,
+    borderBottomColor: theme.colors.primary,
   },
   topRow: {
     flexDirection: 'row',
@@ -51,11 +51,11 @@ const styles = StyleSheet.create({
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: theme.colors.text,
+    color: theme.colors.textPrimary,
   },
   subGreeting: {
     fontSize: 14,
-    color: theme.colors.textLight,
+    color: theme.colors.textSecondary,
   },
   profileImage: {
     width: 40,
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: theme.colors.background,
+    backgroundColor: theme.colors.secondary,
     borderRadius: 8,
     paddingHorizontal: theme.spacing.sm,
   },
@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 40,
     fontSize: 16,
-    color: theme.colors.text,
+    color: theme.colors.textPrimary,
   },
 });
 

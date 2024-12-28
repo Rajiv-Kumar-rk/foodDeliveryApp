@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MenuItem } from '../../../types';
+import { theme } from '../../../styles/theme';
 
 export default function PlaceOrderScreen() {
   const router = useRouter();
@@ -24,19 +25,25 @@ export default function PlaceOrderScreen() {
         renderItem={({ item }) => (
           <Card style={styles.orderItem}>
             <Card.Content>
-              <Title>{item.name}</Title>
-              <Paragraph>${item.price.toFixed(2)}</Paragraph>
+              <Title style={styles.itemName}>{item.name}</Title>
+              <Paragraph style={styles.itemPrice}>${item.price.toFixed(2)}</Paragraph>
             </Card.Content>
           </Card>
         )}
         keyExtractor={(item, index) => index.toString()}
+        contentContainerStyle={styles.listContent}
       />
       <Card style={styles.totalContainer}>
         <Card.Content>
-          <Title>Total: ${totalPrice}</Title>
+          <Title style={styles.totalText}>Total: ${totalPrice}</Title>
         </Card.Content>
       </Card>
-      <Button mode="contained" onPress={placeOrder} style={styles.placeOrderButton}>
+      <Button 
+        mode="contained" 
+        onPress={placeOrder} 
+        style={styles.placeOrderButton}
+        labelStyle={styles.placeOrderButtonLabel}
+      >
         Place Order
       </Button>
     </View>
@@ -46,17 +53,36 @@ export default function PlaceOrderScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background,
+  },
+  listContent: {
+    flexGrow: 1,
   },
   orderItem: {
-    marginBottom: 10,
+    marginBottom: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
+  },
+  itemName: {
+    color: theme.colors.textPrimary,
+  },
+  itemPrice: {
+    color: theme.colors.primary,
   },
   totalContainer: {
-    marginTop: 20,
-    marginBottom: 20,
+    marginTop: theme.spacing.md,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+  },
+  totalText: {
+    color: theme.colors.primary,
+    fontWeight: 'bold',
   },
   placeOrderButton: {
-    marginTop: 10,
+    backgroundColor: theme.colors.primary,
+  },
+  placeOrderButtonLabel: {
+    color: theme.colors.onPrimary,
   },
 });
 

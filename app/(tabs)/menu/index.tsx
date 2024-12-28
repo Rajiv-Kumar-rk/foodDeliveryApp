@@ -7,6 +7,7 @@ import { mockMenuItems } from '../../../mockData';
 import { MenuItem as MenuItemType } from '../../../types';
 import SharedHeader from '../../../components/SharedHeader';
 import Categories from '../../../components/Categories';
+import { theme } from '../../../styles/theme';
 
 export default function MenuListingScreen() {
   const [menuItems] = useState<MenuItemType[]>(mockMenuItems);
@@ -44,6 +45,7 @@ export default function MenuListingScreen() {
         mode="contained"
         onPress={() => router.push({ pathname: '/menu/place-order', params: { order: JSON.stringify(order) } })}
         style={styles.viewOrderButton}
+        labelStyle={styles.viewOrderButtonLabel}
       >
         View Order ({order.length})
       </Button>
@@ -54,13 +56,17 @@ export default function MenuListingScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background,
   },
   listContent: {
-    padding: 16,
+    padding: theme.spacing.md,
   },
   viewOrderButton: {
-    margin: 16,
+    margin: theme.spacing.md,
+    backgroundColor: theme.colors.primary,
+  },
+  viewOrderButtonLabel: {
+    color: theme.colors.onPrimary,
   },
 });
 

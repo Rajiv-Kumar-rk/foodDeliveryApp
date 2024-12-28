@@ -5,12 +5,11 @@ import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../styles/theme';
 
-interface actionButtonProps {
+type actionButtonProps = {
   icon: string;
-  label: String;
-  onPress: ()=> void;
-};
-
+  label: string;
+  onPress: () => void;
+}
 const ActionButton = ({ icon, label, onPress }: actionButtonProps) => (
   <Button
     mode="outlined"
@@ -79,9 +78,9 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     padding: theme.spacing.xl,
-    backgroundColor: theme.colors.white,
+    backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.secondary,
+    borderBottomColor: theme.colors.primary,
   },
   profileImage: {
     width: 150,
@@ -92,12 +91,12 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    color: theme.colors.text,
+    color: theme.colors.textPrimary,
     marginBottom: theme.spacing.xs,
   },
   email: {
     fontSize: 16,
-    color: theme.colors.textLight,
+    color: theme.colors.textSecondary,
   },
   actionButtons: {
     padding: theme.spacing.lg,
