@@ -1,7 +1,27 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
+import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../../styles/theme';
+
+interface actionButtonProps {
+  icon: string;
+  label: String;
+  onPress: ()=> void;
+};
+
+const ActionButton = ({ icon, label, onPress }: actionButtonProps) => (
+  <Button
+    mode="outlined"
+    icon={() => <Ionicons name={icon} size={24} color={theme.colors.primary} />}
+    onPress={onPress}
+    style={styles.actionButton}
+    labelStyle={styles.actionButtonLabel}
+  >
+    {label}
+  </Button>
+);
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -12,77 +32,88 @@ export default function ProfileScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.header}>
         <Image
-          source={{ uri: 'https://via.placeholder.com/100' }}
+          source={{ uri: 'https://via.placeholder.com/150' }}
           style={styles.profileImage}
         />
         <Text style={styles.name}>John Doe</Text>
         <Text style={styles.email}>john.doe@example.com</Text>
       </View>
       <View style={styles.actionButtons}>
-        <TouchableOpacity style={styles.button} onPress={() => alert('Edit Profile')}>
-          <Ionicons name="person-outline" size={24} color="#007AFF" />
-          <Text style={styles.buttonText}>Edit Profile</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/order')}>
-          <Ionicons name="time-outline" size={24} color="#007AFF" />
-          <Text style={styles.buttonText}>Order History</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={() => router.push('/favorites')}>
-          <Ionicons name="heart-outline" size={24} color="#007AFF" />
-          <Text style={styles.buttonText}>Favorites</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.button} onPress={handleLogout}>
-          <Ionicons name="log-out-outline" size={24} color="#007AFF" />
-          <Text style={styles.buttonText}>Logout</Text>
-        </TouchableOpacity>
+        <View style={styles.actionRow}>
+          <ActionButton
+            icon="person-outline"
+            label="Edit Profile"
+            onPress={() => alert('Edit Profile')}
+          />
+          <ActionButton
+            icon="time-outline"
+            label="Order History"
+            onPress={() => router.push('/order')}
+          />
+        </View>
+        <View style={styles.actionRow}>
+          <ActionButton
+            icon="heart-outline"
+            label="Favorites"
+            onPress={() => router.push('/favorites')}
+          />
+          <ActionButton
+            icon="log-out-outline"
+            label="Logout"
+            onPress={handleLogout}
+          />
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: theme.colors.background,
   },
   header: {
     alignItems: 'center',
-    padding: 20,
+    padding: theme.spacing.xl,
+    backgroundColor: theme.colors.white,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: theme.colors.secondary,
   },
   profileImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    marginBottom: 10,
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: theme.spacing.md,
   },
   name: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 5,
+    color: theme.colors.text,
+    marginBottom: theme.spacing.xs,
   },
   email: {
     fontSize: 16,
-    color: '#666',
+    color: theme.colors.textLight,
   },
   actionButtons: {
-    padding: 20,
+    padding: theme.spacing.lg,
   },
-  button: {
+  actionRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 15,
-    borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    justifyContent: 'space-between',
+    marginBottom: theme.spacing.md,
   },
-  buttonText: {
-    marginLeft: 10,
-    fontSize: 16,
-    color: '#007AFF',
+  actionButton: {
+    flex: 1,
+    marginHorizontal: theme.spacing.xs,
+    borderColor: theme.colors.primary,
+  },
+  actionButtonLabel: {
+    color: theme.colors.primary,
   },
 });
 

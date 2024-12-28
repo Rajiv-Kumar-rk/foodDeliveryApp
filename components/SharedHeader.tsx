@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../styles/theme';
 
 interface SharedHeaderProps {
   userName: string;
@@ -23,11 +24,11 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
         />
       </View>
       <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color="#000" style={styles.searchIcon} />
+        <Ionicons name="search" size={20} color={theme.colors.textLight} style={styles.searchIcon} />
         <TextInput
           style={styles.searchInput}
           placeholder="Search for food..."
-          placeholderTextColor="#888"
+          placeholderTextColor={theme.colors.textLight}
         />
       </View>
     </View>
@@ -36,24 +37,25 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#fff',
-    padding: 16,
+    backgroundColor: theme.colors.white,
+    padding: theme.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: '#e0e0e0',
+    borderBottomColor: theme.colors.secondary,
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: theme.spacing.md,
   },
   greeting: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: theme.colors.text,
   },
   subGreeting: {
     fontSize: 14,
-    color: '#666',
+    color: theme.colors.textLight,
   },
   profileImage: {
     width: 40,
@@ -63,17 +65,18 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    backgroundColor: theme.colors.background,
     borderRadius: 8,
-    paddingHorizontal: 8,
+    paddingHorizontal: theme.spacing.sm,
   },
   searchIcon: {
-    marginRight: 8,
+    marginRight: theme.spacing.sm,
   },
   searchInput: {
     flex: 1,
     height: 40,
     fontSize: 16,
+    color: theme.colors.text,
   },
 });
 

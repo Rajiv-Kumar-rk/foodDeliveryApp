@@ -1,4 +1,4 @@
-import { MenuItem, Order } from './types';
+import { MenuItem, Order, User } from './types';
 
 export const mockMenuItems: MenuItem[] = [
   {
@@ -33,6 +33,38 @@ export const mockMenuItems: MenuItem[] = [
     image: 'https://via.placeholder.com/150',
     category: 'Pasta',
   },
+  {
+    _id: '5',
+    name: 'Chicken Tikka Masala',
+    price: 15.99,
+    description: 'Tender chicken in a creamy tomato-based sauce',
+    image: 'https://via.placeholder.com/150',
+    category: 'Indian',
+  },
+  {
+    _id: '6',
+    name: 'Vegetable Stir Fry',
+    price: 11.99,
+    description: 'Mixed vegetables stir-fried in a savory sauce',
+    image: 'https://via.placeholder.com/150',
+    category: 'Asian',
+  },
+  {
+    _id: '7',
+    name: 'Fish and Chips',
+    price: 13.99,
+    description: 'Crispy battered fish served with golden fries',
+    image: 'https://via.placeholder.com/150',
+    category: 'Seafood',
+  },
+  {
+    _id: '8',
+    name: 'Chocolate Brownie',
+    price: 5.99,
+    description: 'Rich, fudgy brownie served with vanilla ice cream',
+    image: 'https://via.placeholder.com/150',
+    category: 'Desserts',
+  },
 ];
 
 export const mockOrders: Order[] = [
@@ -56,5 +88,23 @@ export const mockOrders: Order[] = [
     status: 'preparing',
     createdAt: new Date('2023-05-02T14:30:00Z'),
   },
+  {
+    _id: '103',
+    items: [
+      { menuItem: mockMenuItems[4], quantity: 1 },
+      { menuItem: mockMenuItems[7], quantity: 2 },
+    ],
+    totalPrice: 27.97,
+    status: 'pending',
+    createdAt: new Date('2023-05-03T18:45:00Z'),
+  },
 ];
+
+export const mockUser: User = {
+  _id: 'user1',
+  name: 'John Doe',
+  email: 'john.doe@example.com',
+  profileImage: 'https://via.placeholder.com/150',
+  favoriteItems: ['1', '3', '5'],
+};
 
