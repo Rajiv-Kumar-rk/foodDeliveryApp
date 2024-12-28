@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { Button, Chip } from 'react-native-paper';
+import { Button } from 'react-native-paper';
 import MenuItem from '../../../components/MenuItem';
 import { useRouter } from 'expo-router';
 import { mockMenuItems } from '../../../mockData';
 import { MenuItem as MenuItemType } from '../../../types';
 import SharedHeader from '../../../components/SharedHeader';
+import Categories from '../../../components/Categories';
 
 export default function MenuListingScreen() {
   const [menuItems] = useState<MenuItemType[]>(mockMenuItems);
   const [categories] = useState<string[]>([...new Set(mockMenuItems.map(item => item.category))]);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [order, setOrder] = useState<MenuItemType[]>([]);
   const router = useRouter();
 
@@ -19,30 +20,17 @@ export default function MenuListingScreen() {
   };
 
   const filteredItems = menuItems.filter(item => 
-    !selectedCategory || item.category === selectedCategory
+    selectedCategories.length === 0 || selectedCategories.includes(item.category)
   );
 
   return (
     <View style={styles.container}>
       <SharedHeader userName="John" />
+      <Categories 
+        categories={categories} 
+        onCategoryChange={setSelectedCategories}
+      />
       <FlatList
-        ListHeaderComponent={
-          <FlatList
-            horizontal
-            data={categories}
-            renderItem={({ item }) => (
-              <Chip
-                selected={selectedCategory === item}
-                onPress={() => setSelectedCategory(selectedCategory === item ? null : item)}
-                style={styles.chip}
-              >
-                {item}
-              </Chip>
-            )}
-            keyExtractor={(item) => item}
-            style={styles.categoriesList}
-          />
-        }
         data={filteredItems}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => router.push(`/menu/item-details?itemId=${item._id}`)}>
@@ -50,6 +38,7 @@ export default function MenuListingScreen() {
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item._id}
+        contentContainerStyle={styles.listContent}
       />
       <Button
         mode="contained"
@@ -67,11 +56,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
   },
-  categoriesList: {
-    marginBottom: 10,
-  },
-  chip: {
-    marginRight: 5,
+  listContent: {
+    padding: 16,
   },
   viewOrderButton: {
     margin: 16,
