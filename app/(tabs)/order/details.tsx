@@ -1,51 +1,46 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { View, StyleSheet, FlatList } from 'react-native';
-import { Card, Title, Paragraph, Button } from 'react-native-paper';
+import { Card, Title, Paragraph } from 'react-native-paper';
 import { useLocalSearchParams } from 'expo-router';
-import { Order, OrderItem } from '../../../types';
+import { mockOrders } from '../../../mockData';
+import { theme } from '../../../styles/theme';
 
 export default function OrderDetailsScreen() {
-  const { order: orderParam } = useLocalSearchParams<{ order: string }>();
-  const initialOrder: Order = JSON.parse(orderParam || '{}');
-  const [currentOrder, setCurrentOrder] = useState<Order>(initialOrder);
+  const { orderId } = useLocalSearchParams<{ orderId: string }>();
+  const order = mockOrders.find(o => o._id === orderId);
 
-  const renderOrderItem = ({ item }: { item: OrderItem }) => (
-    <Card style={styles.orderItem}>
-      <Card.Content>
-        <Title>{item.menuItem.name}</Title>
-        <Paragraph>Quantity: {item.quantity}</Paragraph>
-        <Paragraph>Price: ${(item.menuItem.price * item.quantity).toFixed(2)}</Paragraph>
-      </Card.Content>
-    </Card>
-  );
-
-  const refreshStatus = () => {
-    // Simulating status refresh
-    const newStatuses: Order['status'][] = ['pending', 'preparing', 'ready', 'delivered'];
-    const currentIndex = newStatuses.indexOf(currentOrder.status);
-    const newStatus = newStatuses[(currentIndex + 1) % newStatuses.length];
-    setCurrentOrder({...currentOrder, status: newStatus});
-  };
+  if (!order) {
+    return (
+      <View style={styles.container}>
+        <Title style={styles.errorText}>Order not found</Title>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <Card style={styles.orderInfo}>
         <Card.Content>
-          <Title>Order #{currentOrder._id.slice(-6)}</Title>
-          <Paragraph>Status: {currentOrder.status}</Paragraph>
-          <Paragraph>Date: {new Date(currentOrder.createdAt).toLocaleString()}</Paragraph>
-          <Paragraph>Total: ${currentOrder.totalPrice.toFixed(2)}</Paragraph>
+          <Title style={styles.title}>Order #{order._id.slice(-6)}</Title>
+          <Paragraph style={styles.status}>Status: {order.status}</Paragraph>
+          <Paragraph style={styles.date}>Date: {new Date(order.createdAt).toLocaleString()}</Paragraph>
+          <Paragraph style={styles.total}>Total: ${order.totalPrice.toFixed(2)}</Paragraph>
         </Card.Content>
       </Card>
       <Title style={styles.itemsHeader}>Order Items:</Title>
       <FlatList
-        data={currentOrder.items}
-        renderItem={renderOrderItem}
+        data={order.items}
+        renderItem={({ item }) => (
+          <Card style={styles.orderItem}>
+            <Card.Content>
+              <Title style={styles.itemTitle}>{item.menuItem.name}</Title>
+              <Paragraph style={styles.itemQuantity}>Quantity: {item.quantity}</Paragraph>
+              <Paragraph style={styles.itemPrice}>Price: ${(item.menuItem.price * item.quantity).toFixed(2)}</Paragraph>
+            </Card.Content>
+          </Card>
+        )}
         keyExtractor={(item, index) => index.toString()}
       />
-      <Button mode="contained" onPress={refreshStatus} style={styles.refreshButton}>
-        Refresh Status
-      </Button>
     </View>
   );
 }
@@ -53,19 +48,47 @@ export default function OrderDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 15,
+    padding: theme.spacing.md,
+    backgroundColor: theme.colors.background,
   },
   orderInfo: {
-    marginBottom: 20,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+  },
+  title: {
+    color: theme.colors.textPrimary,
+  },
+  status: {
+    color: theme.colors.textSecondary,
+  },
+  date: {
+    color: theme.colors.textSecondary,
+  },
+  total: {
+    color: theme.colors.primary,
+    fontWeight: 'bold',
   },
   itemsHeader: {
-    marginBottom: 10,
+    marginBottom: theme.spacing.sm,
+    color: theme.colors.textPrimary,
   },
   orderItem: {
-    marginBottom: 10,
+    marginBottom: theme.spacing.sm,
+    backgroundColor: theme.colors.surface,
   },
-  refreshButton: {
-    marginTop: 20,
+  itemTitle: {
+    fontSize: 16,
+    color: theme.colors.textPrimary,
+  },
+  itemQuantity: {
+    color: theme.colors.textSecondary,
+  },
+  itemPrice: {
+    color: theme.colors.primary,
+  },
+  errorText: {
+    color: theme.colors.error,
+    textAlign: 'center',
   },
 });
 

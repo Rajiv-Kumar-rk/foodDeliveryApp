@@ -1,7 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Image } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { MenuItem as MenuItemType } from '../types';
+import { theme } from '../styles/theme';
 
 interface MenuItemProps {
   item: MenuItemType;
@@ -11,15 +12,22 @@ interface MenuItemProps {
 export default function MenuItem({ item, onAddToOrder }: MenuItemProps) {
   return (
     <Card style={styles.container}>
-      <Card.Cover source={{ uri: item.image }} />
+      <Image source={{ uri: item.image }} style={styles.image} />
       <Card.Content>
-        <Title>{item.name}</Title>
-        <Paragraph>{item.description}</Paragraph>
-        <Paragraph>Price: ${item.price.toFixed(2)}</Paragraph>
-        <Paragraph>Category: {item.category}</Paragraph>
+        <Title style={styles.title}>{item.name}</Title>
+        <Paragraph style={styles.description}>{item.description}</Paragraph>
+        <Paragraph style={styles.price}>Price: ${item.price.toFixed(2)}</Paragraph>
+        <Paragraph style={styles.category}>Category: {item.category}</Paragraph>
       </Card.Content>
       <Card.Actions>
-        <Button onPress={onAddToOrder}>Add to Order</Button>
+        <Button 
+          onPress={onAddToOrder}
+          mode="contained"
+          style={styles.button}
+          labelStyle={styles.buttonLabel}
+        >
+          Add to Order
+        </Button>
       </Card.Actions>
     </Card>
   );
@@ -27,7 +35,32 @@ export default function MenuItem({ item, onAddToOrder }: MenuItemProps) {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 10,
+    marginBottom: theme.spacing.md,
+    backgroundColor: theme.colors.surface,
+  },
+  image: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  title: {
+    color: theme.colors.textPrimary,
+  },
+  description: {
+    color: theme.colors.textSecondary,
+  },
+  price: {
+    color: theme.colors.primary,
+    fontWeight: 'bold',
+  },
+  category: {
+    color: theme.colors.textSecondary,
+  },
+  button: {
+    backgroundColor: theme.colors.primary,
+  },
+  buttonLabel: {
+    color: theme.colors.onPrimary,
   },
 });
 

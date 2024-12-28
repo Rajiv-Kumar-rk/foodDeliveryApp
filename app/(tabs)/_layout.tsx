@@ -1,6 +1,7 @@
 import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../../styles/theme';
 
 export default function TabsLayout() {
   return (
@@ -22,6 +23,12 @@ export default function TabsLayout() {
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
+        tabBarActiveTintColor: theme.colors.primary,
+        tabBarInactiveTintColor: theme.colors.textSecondary,
+        tabBarStyle: {
+          backgroundColor: theme.colors.surface,
+          borderTopColor: theme.colors.primary,
+        },
         headerShown: false
       })}
     >
@@ -40,7 +47,8 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="favorites"
         options={{
-          title: 'Favorites',
+          title: 'My Favorites',
+          headerShown: true,
         }}
       />
       <Tabs.Screen

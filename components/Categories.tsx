@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Chip } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { theme } from '../styles/theme';
 
 interface CategoriesProps {
   categories: string[];
@@ -39,12 +40,14 @@ export default function Categories({ categories, onCategoryChange }: CategoriesP
           <Text style={styles.seeAll}>{showAll ? 'See Less' : 'See All'}</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.chipContainer}>
         {selectedCategories.map(category => (
           <Chip
             key={category}
             style={[styles.chip, styles.selectedChip]}
+            textStyle={styles.selectedChipText}
             onClose={() => removeCategory(category)}
+            closeIcon="close"
           >
             {category}
           </Chip>
@@ -55,6 +58,7 @@ export default function Categories({ categories, onCategoryChange }: CategoriesP
             <Chip
               key={category}
               style={styles.chip}
+              textStyle={styles.chipText}
               onPress={() => toggleCategory(category)}
             >
               {category}
@@ -67,27 +71,39 @@ export default function Categories({ categories, onCategoryChange }: CategoriesP
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 15,
+    marginBottom: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 10,
+    marginBottom: theme.spacing.sm,
   },
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: theme.colors.textPrimary,
   },
   seeAll: {
-    color: '#007AFF',
+    color: theme.colors.primary,
+  },
+  chipContainer: {
+    flexDirection: 'row',
   },
   chip: {
-    marginRight: 8,
-    marginBottom: 8,
+    marginRight: theme.spacing.sm,
+    marginBottom: theme.spacing.sm,
+    backgroundColor: theme.colors.secondary,
+  },
+  chipText: {
+    color: theme.colors.textPrimary,
   },
   selectedChip: {
-    backgroundColor: '#007AFF',
+    backgroundColor: theme.colors.primary,
+  },
+  selectedChipText: {
+    color: theme.colors.onPrimary,
   },
 });
 
