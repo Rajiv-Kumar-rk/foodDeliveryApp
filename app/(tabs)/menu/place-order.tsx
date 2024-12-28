@@ -4,6 +4,7 @@ import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { MenuItem } from '../../../types';
 import { theme } from '../../../styles/theme';
+import CustomHeader from '../../../components/CustomHeader';
 
 export default function PlaceOrderScreen() {
   const router = useRouter();
@@ -20,6 +21,7 @@ export default function PlaceOrderScreen() {
 
   return (
     <View style={styles.container}>
+      <CustomHeader title="Cart" />
       <FlatList
         data={order}
         renderItem={({ item }) => (

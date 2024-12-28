@@ -3,6 +3,7 @@ import { View, StyleSheet, FlatList } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
 import { useLocalSearchParams } from 'expo-router';
 import { mockOrders } from '../../../mockData';
+import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
 
 export default function OrderDetailsScreen() {
@@ -12,6 +13,7 @@ export default function OrderDetailsScreen() {
   if (!order) {
     return (
       <View style={styles.container}>
+        <CustomHeader title="Order Details" />
         <Title style={styles.errorText}>Order not found</Title>
       </View>
     );
@@ -19,9 +21,9 @@ export default function OrderDetailsScreen() {
 
   return (
     <View style={styles.container}>
+      <CustomHeader title={`Order #${order._id.slice(-6)}`} />
       <Card style={styles.orderInfo}>
         <Card.Content>
-          <Title style={styles.title}>Order #{order._id.slice(-6)}</Title>
           <Paragraph style={styles.status}>Status: {order.status}</Paragraph>
           <Paragraph style={styles.date}>Date: {new Date(order.createdAt).toLocaleString()}</Paragraph>
           <Paragraph style={styles.total}>Total: ${order.totalPrice.toFixed(2)}</Paragraph>
@@ -48,15 +50,11 @@ export default function OrderDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: theme.spacing.md,
     backgroundColor: theme.colors.background,
   },
   orderInfo: {
-    marginBottom: theme.spacing.md,
+    margin: theme.spacing.md,
     backgroundColor: theme.colors.surface,
-  },
-  title: {
-    color: theme.colors.textPrimary,
   },
   status: {
     color: theme.colors.textSecondary,
@@ -69,10 +67,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemsHeader: {
-    marginBottom: theme.spacing.sm,
+    margin: theme.spacing.md,
     color: theme.colors.textPrimary,
   },
   orderItem: {
+    marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
   },
@@ -89,6 +88,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: theme.colors.error,
     textAlign: 'center',
+    margin: theme.spacing.md,
   },
 });
 

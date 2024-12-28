@@ -48,7 +48,6 @@ export default function TabsLayout() {
         name="favorites"
         options={{
           title: 'My Favorites',
-          headerShown: true,
         }}
       />
       <Tabs.Screen

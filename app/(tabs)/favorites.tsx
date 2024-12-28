@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { mockMenuItems } from '../../mockData';
 import { MenuItem as MenuItemType } from '../../types';
-import SharedHeader from '../../components/SharedHeader';
+import CustomHeader from '../../components/CustomHeader';
 import { theme } from '../../styles/theme';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FavoritesScreen() {
   const router = useRouter();
-  const [favoriteItems, setFavoriteItems] = useState<MenuItemType[]>(mockMenuItems.slice(0, 3));
+  const [favoriteItems, setFavoriteItems] = useState<MenuItemType[]>([]);
 
-  const removeFromFavorites = (item: MenuItemType) => {
-    setFavoriteItems(favoriteItems.filter(favItem => favItem._id !== item._id));
+  useEffect(() => {
+    const loadFavorites = async () => {
+      const favorites = await AsyncStorage.getItem('favorites');
+      if (favorites) {
+        const favoritesList = JSON.parse(favorites);
+        const items = mockMenuItems.filter(item => favoritesList.includes(item._id));
+        setFavoriteItems(items);
+      }
+    };
+    loadFavorites();
+  }, []);
+
+  const removeFromFavorites = async (item: MenuItemType) => {
+    const favorites = await AsyncStorage.getItem('favorites');
+    if (favorites) {
+      const favoritesList = JSON.parse(favorites);
+      const updatedFavorites = favoritesList.filter(id => id !== item._id);
+      await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
+      setFavoriteItems(favoriteItems.filter(favItem => favItem._id !== item._id));
+    }
   };
 
   const renderItem = ({ item }: { item: MenuItemType }) => (
@@ -47,6 +66,7 @@ export default function FavoritesScreen() {
 
   return (
     <View style={styles.container}>
+      <CustomHeader title="My Favorites" />
       <FlatList
         data={favoriteItems}
         renderItem={renderItem}

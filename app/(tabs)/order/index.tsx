@@ -3,7 +3,7 @@ import { View, FlatList, StyleSheet } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { mockOrders } from '../../../mockData';
-import SharedHeader from '../../../components/SharedHeader';
+import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
 
 export default function OrderHistoryScreen() {
@@ -11,6 +11,7 @@ export default function OrderHistoryScreen() {
 
   return (
     <View style={styles.container}>
+      <CustomHeader title="Order History" />
       <FlatList
         data={mockOrders}
         renderItem={({ item }) => (

@@ -4,12 +4,14 @@ import { useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../styles/theme';
+import CustomHeader from '../../components/CustomHeader';
 
 type actionButtonProps = {
-  icon: string;
-  label: string;
-  onPress: () => void;
-}
+  icon : string;
+  label : string;
+  onPress : () => void;
+};
+
 const ActionButton = ({ icon, label, onPress }: actionButtonProps) => (
   <Button
     mode="outlined"
@@ -31,42 +33,45 @@ export default function ProfileScreen() {
   };
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.header}>
-        <Image
-          source={{ uri: 'https://via.placeholder.com/150' }}
-          style={styles.profileImage}
-        />
-        <Text style={styles.name}>John Doe</Text>
-        <Text style={styles.email}>john.doe@example.com</Text>
-      </View>
-      <View style={styles.actionButtons}>
-        <View style={styles.actionRow}>
-          <ActionButton
-            icon="person-outline"
-            label="Edit Profile"
-            onPress={() => alert('Edit Profile')}
+    <View style={styles.container}>
+      <CustomHeader title="Profile" />
+      <ScrollView>
+        <View style={styles.header}>
+          <Image
+            source={{ uri: 'https://via.placeholder.com/150' }}
+            style={styles.profileImage}
           />
-          <ActionButton
-            icon="time-outline"
-            label="Order History"
-            onPress={() => router.push('/order')}
-          />
+          <Text style={styles.name}>John Doe</Text>
+          <Text style={styles.email}>john.doe@example.com</Text>
         </View>
-        <View style={styles.actionRow}>
-          <ActionButton
-            icon="heart-outline"
-            label="Favorites"
-            onPress={() => router.push('/favorites')}
-          />
-          <ActionButton
-            icon="log-out-outline"
-            label="Logout"
-            onPress={handleLogout}
-          />
+        <View style={styles.actionButtons}>
+          <View style={styles.actionRow}>
+            <ActionButton
+              icon="person-outline"
+              label="Edit Profile"
+              onPress={() => alert('Edit Profile')}
+            />
+            <ActionButton
+              icon="time-outline"
+              label="Order History"
+              onPress={() => router.push('/order')}
+            />
+          </View>
+          <View style={styles.actionRow}>
+            <ActionButton
+              icon="heart-outline"
+              label="Favorites"
+              onPress={() => router.push('/favorites')}
+            />
+            <ActionButton
+              icon="log-out-outline"
+              label="Logout"
+              onPress={handleLogout}
+            />
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
