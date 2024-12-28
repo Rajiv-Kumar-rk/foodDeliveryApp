@@ -1,10 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { theme } from '../../styles/theme';
-import CustomHeader from '../../components/CustomHeader';
+import { theme } from '../../../styles/theme';
 
 type actionButtonProps = {
   icon : string;
@@ -25,6 +24,8 @@ const ActionButton = ({ icon, label, onPress }: actionButtonProps) => (
 );
 
 export default function ProfileScreen() {
+  const pathname = usePathname();
+    console.log("profile screen> path name: ", pathname);
   const router = useRouter();
 
   const handleLogout = () => {
@@ -32,9 +33,34 @@ export default function ProfileScreen() {
     alert('Logged out');
   };
 
+  const navigation = useNavigation();
+    useEffect(()=> {
+        navigation.setOptions({
+          headerShown: true,
+          title: "Profile",
+          headerBackTitleVisible: false, 
+          // headerBackImage: () => (
+          //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          // ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: theme.colors.surface, 
+          },
+          headerTintColor: theme.colors.primary, 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+            fontSize: 20, 
+            color: theme.colors.textPrimary,
+          },
+        });
+      },[]);
+
   return (
     <View style={styles.container}>
-      <CustomHeader title="Profile" />
       <ScrollView>
         <View style={styles.header}>
           <Image

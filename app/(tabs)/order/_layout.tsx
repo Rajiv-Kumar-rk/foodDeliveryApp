@@ -1,7 +1,6 @@
 import { Stack } from 'expo-router';
 
 export default function OrderHistoryLayout() {
-  console.log("order history");
   return (
     <Stack
     initialRouteName='index'

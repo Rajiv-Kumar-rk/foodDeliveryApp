@@ -1,27 +1,47 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useNavigation, usePathname } from 'expo-router';
 import { mockOrders } from '../../../mockData';
 import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function OrderDetailsScreen() {
+  const pathname = usePathname();
+  console.log("order details screen> path name: ", pathname);
+
+  const navigation = useNavigation();
+  useEffect(()=> {
+      navigation.setOptions({
+        headerShown: true,
+        title: "Order Details",
+        headerBackTitleVisible: false, 
+        // headerBackImage: () => (
+        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+        // ),
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: theme.colors.surface, 
+        },
+        headerTintColor: theme.colors.primary, 
+        headerTitleStyle: {
+          fontWeight: 'bold', 
+          fontSize: 20, 
+          color: theme.colors.textPrimary,
+        },
+      });
+    },[]);
+
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const order = mockOrders.find(o => o._id === orderId);
 
-  if (!order) {
-    return (
-      <View style={styles.container}>
-        <CustomHeader title="Order Details" />
-        <Title style={styles.errorText}>Order not found</Title>
-      </View>
-    );
-  }
-
   return (
     <View style={styles.container}>
-      <CustomHeader title={`Order #${order._id.slice(-6)}`} />
       <Card style={styles.orderInfo}>
         <Card.Content>
           <Paragraph style={styles.status}>Status: {order.status}</Paragraph>

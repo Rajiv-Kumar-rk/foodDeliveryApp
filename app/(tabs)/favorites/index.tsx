@@ -1,17 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import { mockMenuItems } from '../../mockData';
-import { MenuItem as MenuItemType } from '../../types';
-import CustomHeader from '../../components/CustomHeader';
-import { theme } from '../../styles/theme';
+import { mockMenuItems } from '../../../mockData';
+import { MenuItem as MenuItemType } from '../../../types';
+import { theme } from '../../../styles/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function FavoritesScreen() {
   const router = useRouter();
   const [favoriteItems, setFavoriteItems] = useState<MenuItemType[]>([]);
+  const pathname = usePathname();
+    console.log("favorites screen> path name: ", pathname);
+
+  const navigation = useNavigation();
+    useEffect(()=> {
+        navigation.setOptions({
+          headerShown: true,
+          title: "My Favorites",
+          headerBackTitleVisible: false, 
+          // headerBackImage: () => (
+          //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          // ),
+          headerLeft: () => (
+            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+            </TouchableOpacity>
+          ),
+          headerStyle: {
+            backgroundColor: theme.colors.surface, 
+          },
+          headerTintColor: theme.colors.primary, 
+          headerTitleStyle: {
+            fontWeight: 'bold', 
+            fontSize: 20, 
+            color: theme.colors.textPrimary,
+          },
+        });
+      },[]);
 
   useEffect(() => {
     const loadFavorites = async () => {
@@ -23,13 +50,17 @@ export default function FavoritesScreen() {
       }
     };
     loadFavorites();
+
+    return () => {
+      console.log('favorites unmounted');
+    };
   }, []);
 
   const removeFromFavorites = async (item: MenuItemType) => {
     const favorites = await AsyncStorage.getItem('favorites');
     if (favorites) {
       const favoritesList = JSON.parse(favorites);
-      const updatedFavorites = favoritesList.filter(id => id !== item._id);
+      const updatedFavorites = favoritesList.filter((id:string) => id !== item._id);
       await AsyncStorage.setItem('favorites', JSON.stringify(updatedFavorites));
       setFavoriteItems(favoriteItems.filter(favItem => favItem._id !== item._id));
     }
@@ -45,7 +76,7 @@ export default function FavoritesScreen() {
       </Card.Content>
       <Card.Actions>
         <Button 
-          onPress={() => router.push(`/menu/item-details?itemId=${item._id}`)}
+          onPress={() => router.push(`/favorites/fav-item-details?itemId=${item._id}`)}
           mode="outlined"
           style={styles.viewButton}
           labelStyle={styles.viewButtonLabel}
@@ -66,7 +97,6 @@ export default function FavoritesScreen() {
 
   return (
     <View style={styles.container}>
-      <CustomHeader title="My Favorites" />
       <FlatList
         data={favoriteItems}
         renderItem={renderItem}

@@ -6,7 +6,7 @@ import { theme } from '../../styles/theme';
 export default function TabsLayout() {
   return (
     <Tabs 
-      screenOptions={({ route }) => ({
+        screenOptions={({ route }) => ({
         tabBarIcon: ({ focused, color, size }) => {
           let iconName: keyof typeof Ionicons.glyphMap;
 
@@ -29,7 +29,9 @@ export default function TabsLayout() {
           backgroundColor: theme.colors.surface,
           borderTopColor: theme.colors.primary,
         },
-        headerShown: false
+        headerShown: false,        
+        // lazy: false, // Prevent preloading tabs
+        // unmountOnBlur: true, // Unmount tab when it's not focused
       })}
     >
       <Tabs.Screen

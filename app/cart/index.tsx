@@ -1,27 +1,58 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
-import { useLocalSearchParams, useRouter } from 'expo-router';
-import { MenuItem } from '../../../types';
-import { theme } from '../../../styles/theme';
-import CustomHeader from '../../../components/CustomHeader';
+import { useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
+import { MenuItem } from '../../types';
+import { theme } from '../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
+import useCustomHeader from '@/hooks/useCustomHeader';
 
 export default function PlaceOrderScreen() {
+  const pathname = usePathname();
+    console.log("place order screen> path name: ", pathname);
+
   const router = useRouter();
   const { order: orderParam } = useLocalSearchParams<{ order: string }>();
   const order: MenuItem[] = JSON.parse(orderParam || '[]');
+
+  useCustomHeader({title: "Cart", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
+  // const navigation = useNavigation();
+  // useEffect(()=> {
+  //   navigation.setOptions({
+  //     headerShown: true,
+  //     title: "Cart",
+  //     headerBackTitleVisible: false, 
+  //     // headerBackImage: () => (
+  //     //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+  //     // ),
+  //     headerLeft: () => (
+  //       <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+  //         <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+  //       </TouchableOpacity>
+  //     ),
+  //     headerStyle: {
+  //       backgroundColor: theme.colors.surface, 
+  //     },
+  //     headerTintColor: theme.colors.primary, 
+  //     headerTitleStyle: {
+  //       fontWeight: 'bold', 
+  //       fontSize: 20, 
+  //       color: theme.colors.textPrimary,
+  //     },
+  //   });
+  // },[]);
 
   const totalPrice = order.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 
   const placeOrder = () => {
     // Simulating order placement
     alert('Order placed successfully!');
-    router.push('/menu');
+    router.push('/order');
   };
 
   return (
     <View style={styles.container}>
-      <CustomHeader title="Cart" />
+      {/* <CustomHeader title="Cart" /> */}
       <FlatList
         data={order}
         renderItem={({ item }) => (

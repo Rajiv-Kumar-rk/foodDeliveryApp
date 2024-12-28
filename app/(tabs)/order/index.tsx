@@ -1,17 +1,44 @@
-import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockOrders } from '../../../mockData';
-import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function OrderHistoryScreen() {
   const router = useRouter();
+  const pathname = usePathname();
+  console.log("order history screen> path name: ", pathname);
+
+  const navigation = useNavigation();
+  useEffect(()=> {
+      navigation.setOptions({
+        headerShown: true,
+        title: "Order History",
+        headerBackTitleVisible: false, 
+        // headerBackImage: () => (
+        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+        // ),
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: theme.colors.surface, 
+        },
+        headerTintColor: theme.colors.primary, 
+        headerTitleStyle: {
+          fontWeight: 'bold', 
+          fontSize: 20, 
+          color: theme.colors.textPrimary,
+        },
+      });
+    },[]);
 
   return (
     <View style={styles.container}>
-      <CustomHeader title="Order History" />
       <FlatList
         data={mockOrders}
         renderItem={({ item }) => (

@@ -11,7 +11,6 @@ interface CustomHeaderProps {
 export default function CustomHeader({ title }: CustomHeaderProps) {
   const router = useRouter();
   const pathname = usePathname();
-  console.log("pathname: ", pathname );
   const showBackButton = pathname !== '/menu' && pathname !== '/menu/place-order' && pathname !== '/order' && 
                          pathname !== '/favorites' && pathname !== '/profile';
 

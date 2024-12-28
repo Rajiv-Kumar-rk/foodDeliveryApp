@@ -18,14 +18,15 @@ export default function MenuLayout() {
       <Stack.Screen 
         name="item-details" 
         options={{
-          headerTitle: '',
-          headerBackTitle: ' ',
-          headerRight: () => (
-            <Ionicons name="heart-outline" size={24} color="#000" style={{ marginRight: 16 }} />
-          ),
+          headerTitle: 'Item Details',
+          // headerBackTitle: ' ',
+          // headerRight: () => (
+          //   <Ionicons name="heart-outline" size={24} color="#000" style={{ marginRight: 16 }} />
+          // ),
+          headerShown: false,
         }}
       />
-      <Stack.Screen name="place-order" options={{ title: 'Place Order' }} />
+      {/* <Stack.Screen name="place-order" options={{ title: 'Place Order' }} /> */}
     </Stack>
   );
 }
