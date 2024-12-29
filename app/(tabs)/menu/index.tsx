@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import { Button } from 'react-native-paper';
 import MenuItem from '../../../components/MenuItem';
 import { useNavigation, usePathname, useRouter } from 'expo-router';
@@ -76,15 +76,17 @@ export default function MenuListingScreen() {
         keyExtractor={(item) => item._id}
         contentContainerStyle={styles.listContent}
       />
-      <Button
-        mode="contained"
-        onPress={() => router.push('/cart')}
-        style={styles.viewCartButton}
-        labelStyle={styles.viewCartButtonLabel}
-        // icon={() => <Ionicons name="cart-outline" size={24} color={theme.colors.onPrimary} />}
-      >
-        View Cart
-      </Button>
+      <View style={styles.buttonContainer}>
+        <Button
+          mode="contained"
+          onPress={() => router.push('/cart')}
+          style={styles.viewCartButton}
+          labelStyle={styles.viewCartButtonLabel}
+          // icon={() => <Ionicons name="cart-outline" size={24} color={theme.colors.onPrimary} />}
+        >
+          View Cart
+        </Button>
+      </View>
     </View>
   );
 }
@@ -96,6 +98,14 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: theme.spacing.md,
+  },
+  buttonContainer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    // padding: theme.spacing.md,
+    backgroundColor: theme.colors.background,
   },
   viewCartButton: {
     margin: theme.spacing.md,
