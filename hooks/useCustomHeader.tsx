@@ -25,7 +25,7 @@ const useCustomHeader = ({
               onPress={onBackPress || (() => navigation.goBack())}
               style={{ marginRight: theme.spacing.md }}
             >
-              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+              <Ionicons name="chevron-back-outline" size={24} color={theme.colors.primary} />
             </TouchableOpacity>
           )
         : null,

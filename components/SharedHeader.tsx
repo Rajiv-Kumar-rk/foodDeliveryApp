@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../styles/theme';
+import SearchBar from "../components/SearchBar";
 
 interface SharedHeaderProps {
   userName: string;
@@ -10,6 +11,7 @@ interface SharedHeaderProps {
 
 export default function SharedHeader({ userName }: SharedHeaderProps) {
   const router = useRouter();
+  const [isFocused, setIsFocused] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -26,14 +28,14 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
           <Ionicons name="cart-outline" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
-      <View style={styles.searchContainer}>
-        <Ionicons name="search" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
-        <TextInput
-          style={styles.searchInput}
+      <TouchableOpacity onPress={() => router.push('/search')}>
+        <SearchBar
+          value=""
+          onChangeText={() => {}}
           placeholder="Search for food..."
-          placeholderTextColor={theme.colors.textSecondary}
+          icon={<Ionicons name="search" size={20} color={theme.colors.textSecondary} />}
         />
-      </View>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -64,22 +66,6 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 20,
-  },
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: theme.colors.secondary,
-    borderRadius: 8,
-    paddingHorizontal: theme.spacing.sm,
-  },
-  searchIcon: {
-    marginRight: theme.spacing.sm,
-  },
-  searchInput: {
-    flex: 1,
-    height: 40,
-    fontSize: 16,
-    color: theme.colors.textPrimary,
   },
   cartIconContainer: {
     padding: theme.spacing.sm,
