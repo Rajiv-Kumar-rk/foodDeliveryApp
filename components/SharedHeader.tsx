@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../styles/theme';
@@ -28,14 +28,14 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
           <Ionicons name="cart-outline" size={24} color={theme.colors.primary} />
         </TouchableOpacity>
       </View>
-      <TouchableOpacity onPress={() => router.push('/search')}>
+      <Pressable onPress={() => router.push('/search')}>
         <SearchBar
           value=""
           onChangeText={() => {}}
           placeholder="Search for food..."
-          icon={<Ionicons name="search" size={20} color={theme.colors.textSecondary} />}
+          editableSearch={false}
         />
-      </TouchableOpacity>
+      </Pressable>
     </View>
   );
 }

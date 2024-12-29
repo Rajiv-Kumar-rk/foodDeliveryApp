@@ -7,19 +7,20 @@ interface SearchBarProps {
   placeholder?: string;
   value: string;
   onChangeText: (text: string) => void;
-  onSubmit?: () => void;
+//   onSubmit?: () => void;
   showBackArrow?: boolean;
   onBackPress?: () => void;
-  icon?: React.ReactNode;
+    editableSearch: boolean
 }
 
 const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = 'Search...',
   value,
   onChangeText,
-  onSubmit,
+//   onSubmit,
   showBackArrow = false,
   onBackPress,
+  editableSearch
 }) => {
   return (
     <View style={styles.container}>
@@ -34,8 +35,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
           placeholderTextColor={theme.colors.textSecondary}
           value={value}
           onChangeText={onChangeText}
-          onSubmitEditing={onSubmit}
+        //   onSubmitEditing={onSubmit}
           returnKeyType="search"
+          editable={editableSearch}
+          cursorColor={theme.colors.textPrimary}
         />
         { showBackArrow ? (<Ionicons name="search" size={20} color={theme.colors.primary} style={styles.leftIcon} />) : null}
       </View>

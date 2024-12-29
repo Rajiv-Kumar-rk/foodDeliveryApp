@@ -11,7 +11,7 @@ export default function OrderDetailsScreen() {
   console.log("order details screen> path name: ", pathname);
   const router = useRouter();
 
-  useCustomHeader({title: "Order Details", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
+  useCustomHeader({title: "Order Details", showBackButton: true, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const order = mockOrders.find(o => o._id === orderId);

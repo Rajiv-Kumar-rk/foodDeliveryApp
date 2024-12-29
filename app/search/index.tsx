@@ -35,10 +35,11 @@ const SearchScreen = () => {
       <SearchBar
         value={searchQuery}
         onChangeText={setSearchQuery}
-        onSubmit={handleSearch}
-        showBackArrow
+        // onSubmit={handleSearch}
+        showBackArrow={true}
         onBackPress={() => router.back()}
         placeholder="Search for food..."
+        editableSearch={true}
       />
       {searchQuery === '' ? (
         <View style={styles.defaultMessageContainer}>
