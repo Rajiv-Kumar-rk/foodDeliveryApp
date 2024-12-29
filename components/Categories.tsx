@@ -71,7 +71,7 @@ export default function Categories({ categories, onCategoryChange }: CategoriesP
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: theme.spacing.md,
+    marginVertical: theme.spacing.sm,
     paddingHorizontal: theme.spacing.md,
   },
   header: {

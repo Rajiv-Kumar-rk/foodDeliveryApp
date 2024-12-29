@@ -17,32 +17,7 @@ export default function PlaceOrderScreen() {
   const order: MenuItem[] = JSON.parse(orderParam || '[]');
 
   const navigation = useNavigation();
-  useCustomHeader({title: "Cart1", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
-  // const navigation = useNavigation();
-  // useEffect(()=> {
-  //   navigation.setOptions({
-  //     headerShown: true,
-  //     title: "Cart",
-  //     headerBackTitleVisible: false, 
-  //     // headerBackImage: () => (
-  //     //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-  //     // ),
-  //     headerLeft: () => (
-  //       <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-  //         <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-  //       </TouchableOpacity>
-  //     ),
-  //     headerStyle: {
-  //       backgroundColor: theme.colors.surface, 
-  //     },
-  //     headerTintColor: theme.colors.primary, 
-  //     headerTitleStyle: {
-  //       fontWeight: 'bold', 
-  //       fontSize: 20, 
-  //       color: theme.colors.textPrimary,
-  //     },
-  //   });
-  // },[]);
+  useCustomHeader({title: "Cart", showBackButton: true, onBackPress: null, customHeaderOptions: {}});
 
   const totalPrice = order.reduce((sum, item) => sum + item.price, 0).toFixed(2);
 

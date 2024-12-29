@@ -7,6 +7,7 @@ import { mockMenuItems } from '../../../mockData';
 import { MenuItem as MenuItemType } from '../../../types';
 import { theme } from '../../../styles/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 export default function FavoritesScreen() {
   const router = useRouter();
@@ -14,31 +15,7 @@ export default function FavoritesScreen() {
   const pathname = usePathname();
     console.log("favorites screen> path name: ", pathname);
 
-  const navigation = useNavigation();
-    useEffect(()=> {
-        navigation.setOptions({
-          headerShown: true,
-          title: "My Favorites",
-          headerBackTitleVisible: false, 
-          // headerBackImage: () => (
-          //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          // ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: theme.colors.surface, 
-          },
-          headerTintColor: theme.colors.primary, 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-            fontSize: 20, 
-            color: theme.colors.textPrimary,
-          },
-        });
-      },[]);
+  useCustomHeader({title: "My Favorites", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
 
   useEffect(() => {
     const loadFavorites = async () => {

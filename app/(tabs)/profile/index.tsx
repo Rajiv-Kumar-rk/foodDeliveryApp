@@ -4,6 +4,7 @@ import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../../styles/theme';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 type actionButtonProps = {
   icon : string;
@@ -33,31 +34,7 @@ export default function ProfileScreen() {
     alert('Logged out');
   };
 
-  const navigation = useNavigation();
-    useEffect(()=> {
-        navigation.setOptions({
-          headerShown: true,
-          title: "Profile",
-          headerBackTitleVisible: false, 
-          // headerBackImage: () => (
-          //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          // ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: theme.colors.surface, 
-          },
-          headerTintColor: theme.colors.primary, 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-            fontSize: 20, 
-            color: theme.colors.textPrimary,
-          },
-        });
-      },[]);
+  useCustomHeader({title: "Profile", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
 
   return (
     <View style={styles.container}>
@@ -109,9 +86,9 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     padding: theme.spacing.xl,
-    backgroundColor: theme.colors.surface,
+    // backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.primary,
+    borderBottomColor: theme.colors.secondary,
   },
   profileImage: {
     width: 150,

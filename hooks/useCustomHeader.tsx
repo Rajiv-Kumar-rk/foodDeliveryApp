@@ -10,7 +10,6 @@ const useCustomHeader = ({
   onBackPress = null,
   customHeaderOptions = {},
 }) => {
-    console.log("show back button: ", showBackButton)
   const navigation = useNavigation();
 
   useEffect(() => {
@@ -30,6 +29,7 @@ const useCustomHeader = ({
         : null,
       headerStyle: {
         backgroundColor: theme.colors.surface,
+        borderBottomColor: theme.colors.secondary,
         // ...customHeaderOptions?.headerStyle,
       },
       headerTintColor: theme.colors.primary,

@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surface,
     padding: theme.spacing.md,
     borderBottomWidth: 1,
-    borderBottomColor: theme.colors.primary,
+    borderBottomColor: theme.colors.secondary, //theme.colors.primary,
   },
   topRow: {
     flexDirection: 'row',

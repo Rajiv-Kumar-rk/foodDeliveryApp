@@ -5,37 +5,14 @@ import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockOrders } from '../../../mockData';
 import { theme } from '../../../styles/theme';
 import { Ionicons } from '@expo/vector-icons';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 export default function OrderHistoryScreen() {
   const router = useRouter();
   const pathname = usePathname();
   console.log("order history screen> path name: ", pathname);
 
-  const navigation = useNavigation();
-  useEffect(()=> {
-      navigation.setOptions({
-        headerShown: true,
-        title: "Order History",
-        headerBackTitleVisible: false, 
-        // headerBackImage: () => (
-        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-        // ),
-        // headerLeft: () => (
-        //   <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-        //     <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-        //   </TouchableOpacity>
-        // ),
-        headerStyle: {
-          backgroundColor: theme.colors.surface, 
-        },
-        headerTintColor: theme.colors.primary, 
-        headerTitleStyle: {
-          fontWeight: 'bold', 
-          fontSize: 20, 
-          color: theme.colors.textPrimary,
-        },
-      });
-    },[]);
+  useCustomHeader({title: "Order History", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
 
   return (
     <View style={styles.container}>
