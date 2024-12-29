@@ -8,6 +8,17 @@ import { MenuItem as MenuItemType } from '../../../types';
 import SharedHeader from '../../../components/SharedHeader';
 import Categories from '../../../components/Categories';
 import { theme } from '../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+type CartItem = {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  quantity: number;
+};
 
 export default function MenuListingScreen() {
   const pathname = usePathname();
@@ -16,11 +27,32 @@ export default function MenuListingScreen() {
   const [menuItems] = useState<MenuItemType[]>(mockMenuItems);
   const [categories] = useState<string[]>([...new Set(mockMenuItems.map(item => item.category))]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [order, setOrder] = useState<MenuItemType[]>([]);
+  // const [order, setOrder] = useState<MenuItemType[]>([]);
   const router = useRouter();
 
-  const addToOrder = (item: MenuItemType) => {
-    setOrder([...order, item]);
+  // const addToOrder = (item: MenuItemType) => {
+  //   setOrder([...order, item]);
+  // };
+  const addToCart = async (item) => {
+    try {
+      // const item = menuItems.find(i => i._id === item?._id);
+      const cartData = await AsyncStorage.getItem('cart');
+      let cart = cartData ? JSON.parse(cartData) : [];
+      const existingItem = cart.find((cartItem: CartItem) => cartItem._id === item._id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({ ...item, quantity : 1});
+      }
+      
+      await AsyncStorage.setItem('cart', JSON.stringify(cart));
+      alert(`Added ${1} ${item.name}(s) to your cart!`);
+      // router.back();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    }
   };
 
   const filteredItems = menuItems.filter(item => 
@@ -29,7 +61,7 @@ export default function MenuListingScreen() {
 
   return (
     <View style={styles.container}>
-      <SharedHeader userName="John" />
+      <SharedHeader userName="User" />
       <Categories 
         categories={categories} 
         onCategoryChange={setSelectedCategories}
@@ -38,7 +70,7 @@ export default function MenuListingScreen() {
         data={filteredItems}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => router.push(`/menu/item-details?itemId=${item._id}`)}>
-            <MenuItem item={item} onAddToOrder={() => addToOrder(item)} />
+            <MenuItem item={item} onAddToOrder={() => addToCart(item)} />
           </TouchableOpacity>
         )}
         keyExtractor={(item) => item._id}
@@ -46,11 +78,12 @@ export default function MenuListingScreen() {
       />
       <Button
         mode="contained"
-        onPress={() => router.push({ pathname: '/cart', params: { order: JSON.stringify(order) } })}
-        style={styles.viewOrderButton}
-        labelStyle={styles.viewOrderButtonLabel}
+        onPress={() => router.push('/cart')}
+        style={styles.viewCartButton}
+        labelStyle={styles.viewCartButtonLabel}
+        icon={() => <Ionicons name="cart-outline" size={24} color={theme.colors.onPrimary} />}
       >
-        View Order ({order.length})
+        View Cart
       </Button>
     </View>
   );
@@ -64,11 +97,11 @@ const styles = StyleSheet.create({
   listContent: {
     padding: theme.spacing.md,
   },
-  viewOrderButton: {
+  viewCartButton: {
     margin: theme.spacing.md,
     backgroundColor: theme.colors.primary,
   },
-  viewOrderButtonLabel: {
+  viewCartButtonLabel: {
     color: theme.colors.onPrimary,
   },
 });
