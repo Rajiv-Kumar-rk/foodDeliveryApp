@@ -63,8 +63,21 @@ export default function ProfileScreen() {
           <View style={styles.actionRow}>
             <ActionButton
               icon="heart-outline"
-              label="Favorites"
+              label="My Favorites"
               onPress={() => router.push('/favorites')}
+            />
+            
+            <ActionButton
+              icon="cart-outline"
+              label="Cart"
+              onPress={() => router.push('/cart')}
+            />
+          </View>
+          <View style={styles.actionRow}>
+            <ActionButton
+              icon="lock-open-outline"
+              label="Reset Password"
+              onPress={() => alert('Reset Password')}
             />
             <ActionButton
               icon="log-out-outline"

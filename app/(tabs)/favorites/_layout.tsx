@@ -8,7 +8,6 @@ export default function FavLayout() {
       headerShown: false,
     })}>
       <Stack.Screen name="index" options={{ title: 'Favorites' }} />
-      <Stack.Screen name="fav-item-details" options={{ title: 'Item Details' }} />
     </Stack>
   );
 }

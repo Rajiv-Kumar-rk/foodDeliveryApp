@@ -67,9 +67,9 @@ export default function MenuListingScreen() {
         onCategoryChange={setSelectedCategories}
       />
       <FlatList
-        data={filteredItems}
+        data={filteredItems} 
         renderItem={({ item }) => (
-          <TouchableOpacity onPress={() => router.push(`/menu/item-details?itemId=${item._id}`)}>
+          <TouchableOpacity onPress={() => router.push(`/item-details/${item._id}`)}>
             <MenuItem item={item} onAddToOrder={() => addToCart(item)} />
           </TouchableOpacity>
         )}
