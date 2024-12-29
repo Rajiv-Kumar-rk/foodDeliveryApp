@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation, usePathname, useRouter } from 'expo-router';
+import { useFocusEffect, useNavigation, usePathname, useRouter } from 'expo-router';
 import { Button, Card, Title, Paragraph } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { mockMenuItems } from '../../../mockData';
@@ -13,25 +13,30 @@ export default function FavoritesScreen() {
   const router = useRouter();
   const [favoriteItems, setFavoriteItems] = useState<MenuItemType[]>([]);
   const pathname = usePathname();
-    console.log("favorites screen> path name: ", pathname);
+  console.log("favorites screen> path name: ", pathname);
 
   useCustomHeader({title: "My Favorites", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
-  useEffect(() => {
-    const loadFavorites = async () => {
+  // used useCallback hook to memorize the callback function reference, as the tab get mounted only once that's why we can't use  useEffect
+  useFocusEffect(
+    useCallback(() => {
+      loadFavorites();
+    }, [])
+  );
+
+  
+  const loadFavorites = async () => {
+    try {
       const favorites = await AsyncStorage.getItem('favorites');
       if (favorites) {
         const favoritesList = JSON.parse(favorites);
         const items = mockMenuItems.filter(item => favoritesList.includes(item._id));
         setFavoriteItems(items);
       }
-    };
-    loadFavorites();
-
-    return () => {
-      console.log('favorites unmounted');
-    };
-  }, []);
+    } catch(e) {
+      console.error('Error loading favorites items:', e);
+    }
+  };
 
   const removeFromFavorites = async (item: MenuItemType) => {
     const favorites = await AsyncStorage.getItem('favorites');
@@ -53,7 +58,7 @@ export default function FavoritesScreen() {
       </Card.Content>
       <Card.Actions>
         <Button 
-          onPress={() => router.push(`/favorites/fav-item-details?itemId=${item._id}`)}
+          onPress={() => router.push(`/item-details/${item._id}`)}
           mode="outlined"
           style={styles.viewButton}
           labelStyle={styles.viewButtonLabel}
