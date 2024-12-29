@@ -1,27 +1,49 @@
-import React from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import { useLocalSearchParams } from 'expo-router';
+import { useLocalSearchParams, useNavigation, usePathname } from 'expo-router';
 import { mockOrders } from '../../../mockData';
+import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export default function OrderDetailsScreen() {
+  const pathname = usePathname();
+  console.log("order details screen> path name: ", pathname);
+
+  const navigation = useNavigation();
+  useEffect(()=> {
+      navigation.setOptions({
+        headerShown: true,
+        title: "Order Details",
+        headerBackTitleVisible: false, 
+        // headerBackImage: () => (
+        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+        // ),
+        headerLeft: () => (
+          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
+            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+          </TouchableOpacity>
+        ),
+        headerStyle: {
+          backgroundColor: theme.colors.surface, 
+        },
+        headerTintColor: theme.colors.primary, 
+        headerTitleStyle: {
+          fontWeight: 'bold', 
+          fontSize: 20, 
+          color: theme.colors.textPrimary,
+        },
+      });
+    },[]);
+
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const order = mockOrders.find(o => o._id === orderId);
-
-  if (!order) {
-    return (
-      <View style={styles.container}>
-        <Title style={styles.errorText}>Order not found</Title>
-      </View>
-    );
-  }
 
   return (
     <View style={styles.container}>
       <Card style={styles.orderInfo}>
         <Card.Content>
-          <Title style={styles.title}>Order #{order._id.slice(-6)}</Title>
           <Paragraph style={styles.status}>Status: {order.status}</Paragraph>
           <Paragraph style={styles.date}>Date: {new Date(order.createdAt).toLocaleString()}</Paragraph>
           <Paragraph style={styles.total}>Total: ${order.totalPrice.toFixed(2)}</Paragraph>
@@ -48,15 +70,11 @@ export default function OrderDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: theme.spacing.md,
     backgroundColor: theme.colors.background,
   },
   orderInfo: {
-    marginBottom: theme.spacing.md,
+    margin: theme.spacing.md,
     backgroundColor: theme.colors.surface,
-  },
-  title: {
-    color: theme.colors.textPrimary,
   },
   status: {
     color: theme.colors.textSecondary,
@@ -69,10 +87,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemsHeader: {
-    marginBottom: theme.spacing.sm,
+    margin: theme.spacing.md,
     color: theme.colors.textPrimary,
   },
   orderItem: {
+    marginHorizontal: theme.spacing.md,
     marginBottom: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
   },
@@ -89,6 +108,7 @@ const styles = StyleSheet.create({
   errorText: {
     color: theme.colors.error,
     textAlign: 'center',
+    margin: theme.spacing.md,
   },
 });
 

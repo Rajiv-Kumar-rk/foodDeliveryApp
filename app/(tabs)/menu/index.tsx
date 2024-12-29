@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-paper';
 import MenuItem from '../../../components/MenuItem';
-import { useRouter } from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockMenuItems } from '../../../mockData';
 import { MenuItem as MenuItemType } from '../../../types';
 import SharedHeader from '../../../components/SharedHeader';
@@ -10,6 +10,9 @@ import Categories from '../../../components/Categories';
 import { theme } from '../../../styles/theme';
 
 export default function MenuListingScreen() {
+  const pathname = usePathname();
+    console.log("menu lisitng screen> path name: ", pathname);
+
   const [menuItems] = useState<MenuItemType[]>(mockMenuItems);
   const [categories] = useState<string[]>([...new Set(mockMenuItems.map(item => item.category))]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
@@ -43,7 +46,7 @@ export default function MenuListingScreen() {
       />
       <Button
         mode="contained"
-        onPress={() => router.push({ pathname: '/menu/place-order', params: { order: JSON.stringify(order) } })}
+        onPress={() => router.push({ pathname: '/cart', params: { order: JSON.stringify(order) } })}
         style={styles.viewOrderButton}
         labelStyle={styles.viewOrderButtonLabel}
       >

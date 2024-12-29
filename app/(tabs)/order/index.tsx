@@ -1,13 +1,18 @@
-import React from 'react';
-import { View, FlatList, StyleSheet } from 'react-native';
+import React, { useEffect } from 'react';
+import { View, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph, Button } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockOrders } from '../../../mockData';
-import SharedHeader from '../../../components/SharedHeader';
 import { theme } from '../../../styles/theme';
+import { Ionicons } from '@expo/vector-icons';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 export default function OrderHistoryScreen() {
   const router = useRouter();
+  const pathname = usePathname();
+  console.log("order history screen> path name: ", pathname);
+
+  useCustomHeader({title: "Order History", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
 
   return (
     <View style={styles.container}>
