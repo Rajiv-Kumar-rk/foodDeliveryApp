@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, FlatList, TouchableOpacity, Image, Text } from 'react-native';
 import { Card, Title, Paragraph, Button, IconButton } from 'react-native-paper';
 import { useNavigation, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +18,7 @@ export default function CartScreen() {
   const router = useRouter();
   const navigation = useNavigation();
 
-  useCustomHeader({title: "Cart", showBackButton: true, onBackPress: null, customHeaderOptions: {}});
+  useCustomHeader({title: "Cart", showBackButton: true, onBackPress: null, showCartButton: false, onCartPress: ()=> router.push('/cart'), customHeaderOptions: {}});
 
   useEffect(() => {
     loadCartItems();
@@ -90,28 +90,36 @@ export default function CartScreen() {
 
   const renderCartItem = ({ item }: { item: CartItem }) => (
     <Card style={styles.cartItem}>
-      <Card.Content>
-        <View style={styles.itemHeader}>
-          <Title style={styles.itemName}>{item.name}</Title>
-          <TouchableOpacity onPress={() => removeCartItem(item._id)}>
-            <Ionicons name="close-circle-outline" size={24} color={theme.colors.error} />
+      <View style={styles.cartItemContent}>
+        <View style={styles.itemDetails}>
+          <View style={styles.itemHeader}>
+            <Title style={styles.itemName}>{item.name}</Title>
+            <Paragraph style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Paragraph>
+          </View>
+          <TouchableOpacity onPress={() => removeCartItem(item._id)} style={styles.removeButton}>
+            <Ionicons name="trash-outline" size={20} color={theme.colors.error} />
+            <Text style={styles.removeText}>Remove</Text>
           </TouchableOpacity>
         </View>
-        <Paragraph style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Paragraph>
-        <View style={styles.quantityContainer}>
-          <IconButton
-            icon="minus"
-            size={20}
-            onPress={() => updateCartItem(item._id, item.quantity - 1)}
-          />
-          <Paragraph style={styles.quantity}>{item.quantity}</Paragraph>
-          <IconButton
-            icon="plus"
-            size={20}
-            onPress={() => updateCartItem(item._id, item.quantity + 1)}
-          />
+        <View style={styles.imageContainer}>
+          <Image source={{ uri: item.image }} style={styles.itemImage} />
+          <View style={styles.quantityContainer}>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => updateCartItem(item._id, item.quantity - 1)}
+            >
+              <Ionicons name="remove" size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+            <Paragraph style={styles.quantity}>{item.quantity}</Paragraph>
+            <TouchableOpacity
+              style={styles.quantityButton}
+              onPress={() => updateCartItem(item._id, item.quantity + 1)}
+            >
+              <Ionicons name="add" size={20} color={theme.colors.primary} />
+            </TouchableOpacity>
+          </View>
         </View>
-      </Card.Content>
+      </View>
     </Card>
   );
 
@@ -163,27 +171,64 @@ const styles = StyleSheet.create({
     marginBottom: theme.spacing.md,
     backgroundColor: theme.colors.surface,
   },
-  itemHeader: {
+  cartItemContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    padding: theme.spacing.md,
+  },
+  itemDetails: {
+    flex: 1,
+    marginRight: theme.spacing.md,
+  },
+  itemHeader: {
+    flexDirection: 'column',
+    alignItems: 'flex-start',
   },
   itemName: {
     color: theme.colors.textPrimary,
-    flex: 1,
+    fontSize: 16,
+    fontWeight: 'bold',
   },
   itemPrice: {
     color: theme.colors.primary,
     fontWeight: 'bold',
+    marginTop: theme.spacing.sm,
+  },
+  imageContainer: {
+    width: 100,
+    aspectRatio: 1,
+    position: 'relative',
+  },
+  itemImage: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 8,
   },
   quantityContainer: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    justifyContent: 'flex-end',
-    marginTop: theme.spacing.sm,
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderBottomLeftRadius: 8,
+    borderBottomRightRadius: 8,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
+  },
+  quantityButton: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    backgroundColor: theme.colors.surface,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: theme.colors.primary,
   },
   quantity: {
-    marginHorizontal: theme.spacing.sm,
     fontSize: 16,
     color: theme.colors.textPrimary,
   },
@@ -206,6 +251,16 @@ const styles = StyleSheet.create({
   },
   placeOrderButtonLabel: {
     color: theme.colors.onPrimary,
+  },
+  removeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: theme.spacing.sm,
+  },
+  removeText: {
+    color: theme.colors.error,
+    marginLeft: theme.spacing.xs,
+    fontSize: 14,
   },
 });
 
