@@ -15,7 +15,7 @@ export default function FavoritesScreen() {
   const pathname = usePathname();
     console.log("favorites screen> path name: ", pathname);
 
-  useCustomHeader({title: "My Favorites", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
+  useCustomHeader({title: "My Favorites", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   useEffect(() => {
     const loadFavorites = async () => {

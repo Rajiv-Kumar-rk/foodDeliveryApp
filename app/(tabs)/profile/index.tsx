@@ -34,7 +34,7 @@ export default function ProfileScreen() {
     alert('Logged out');
   };
 
-  useCustomHeader({title: "Profile", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
+  useCustomHeader({title: "Profile", showBackButton: false, onBackPress: null, showCartButton: false, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   return (
     <View style={styles.container}>

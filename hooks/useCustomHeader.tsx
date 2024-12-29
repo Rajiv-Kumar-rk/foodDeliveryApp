@@ -8,6 +8,8 @@ const useCustomHeader = ({
   title = '',
   showBackButton = true,
   onBackPress = null,
+  showCartButton = true,
+  onCartPress = () => {},
   customHeaderOptions = {},
 }) => {
   const navigation = useNavigation();
@@ -24,6 +26,16 @@ const useCustomHeader = ({
               style={{ marginRight: theme.spacing.md }}
             >
               <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
+            </TouchableOpacity>
+          )
+        : null,
+        headerRight: showCartButton
+        ? () => (
+            <TouchableOpacity
+              onPress={onCartPress || (() => alert('onCartPress is not provided!'))}
+              style={{ marginRight: theme.spacing.md }}
+            >
+              <Ionicons name="cart-outline" size={24} color={theme.colors.primary} />
             </TouchableOpacity>
           )
         : null,

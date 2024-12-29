@@ -12,7 +12,7 @@ export default function OrderHistoryScreen() {
   const pathname = usePathname();
   console.log("order history screen> path name: ", pathname);
 
-  useCustomHeader({title: "Order History", showBackButton: false, onBackPress: null, customHeaderOptions: {}});
+  useCustomHeader({title: "Order History", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   return (
     <View style={styles.container}>

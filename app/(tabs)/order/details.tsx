@@ -1,41 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import { View, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import { Card, Title, Paragraph } from 'react-native-paper';
-import { useLocalSearchParams, useNavigation, usePathname } from 'expo-router';
+import { useLocalSearchParams, useNavigation, usePathname, useRouter } from 'expo-router';
 import { mockOrders } from '../../../mockData';
-import CustomHeader from '../../../components/CustomHeader';
 import { theme } from '../../../styles/theme';
-import { Ionicons } from '@expo/vector-icons';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 export default function OrderDetailsScreen() {
   const pathname = usePathname();
   console.log("order details screen> path name: ", pathname);
+  const router = useRouter();
 
-  const navigation = useNavigation();
-  useEffect(()=> {
-      navigation.setOptions({
-        headerShown: true,
-        title: "Order Details",
-        headerBackTitleVisible: false, 
-        // headerBackImage: () => (
-        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-        // ),
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          </TouchableOpacity>
-        ),
-        headerStyle: {
-          backgroundColor: theme.colors.surface, 
-        },
-        headerTintColor: theme.colors.primary, 
-        headerTitleStyle: {
-          fontWeight: 'bold', 
-          fontSize: 20, 
-          color: theme.colors.textPrimary,
-        },
-      });
-    },[]);
+  useCustomHeader({title: "Order Details", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   const { orderId } = useLocalSearchParams<{ orderId: string }>();
   const order = mockOrders.find(o => o._id === orderId);

@@ -27,7 +27,7 @@ export default function ItemDetailsScreen() {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  useCustomHeader({title: "Item Details", showBackButton: true, onBackPress: null, customHeaderOptions:{}});
+  useCustomHeader({title: "Item Details", showBackButton: true, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions:{}});
 
   useEffect(() => {
     const checkFavoriteStatus = async () => {

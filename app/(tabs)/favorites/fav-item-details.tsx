@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { mockMenuItems } from '../../../mockData';
 import { theme } from '../../../styles/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useCustomHeader from '../../../hooks/useCustomHeader';
 
 export default function ItemDetailsScreen() {
   const pathname = usePathname();
@@ -16,31 +17,8 @@ export default function ItemDetailsScreen() {
   const item = mockMenuItems.find(i => i._id === itemId);
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
-  const navigation = useNavigation();
-  useEffect(()=> {
-      navigation.setOptions({
-        headerShown: true,
-        title: "Item Details",
-        headerBackTitleVisible: false, 
-        // headerBackImage: () => (
-        //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-        // ),
-        headerLeft: () => (
-          <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-            <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          </TouchableOpacity>
-        ),
-        headerStyle: {
-          backgroundColor: theme.colors.surface, 
-        },
-        headerTintColor: theme.colors.primary, 
-        headerTitleStyle: {
-          fontWeight: 'bold', 
-          fontSize: 20, 
-          color: theme.colors.textPrimary,
-        },
-      });
-    },[]);
+  
+  useCustomHeader({title: "Item Details", showBackButton: false, onBackPress: null, showCartButton: true, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
 
   useEffect(() => {
     const checkFavoriteStatus = async () => {

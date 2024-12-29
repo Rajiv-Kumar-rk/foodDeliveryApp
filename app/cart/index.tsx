@@ -18,7 +18,7 @@ export default function CartScreen() {
   const router = useRouter();
   const navigation = useNavigation();
 
-  useCustomHeader({title: "Cart", showBackButton: true, onBackPress: null, customHeaderOptions: {}});
+  useCustomHeader({title: "Cart", showBackButton: true, onBackPress: null, showCartButton: false, onCartPress: ()=> router.push('/cart'), customHeaderOptions: {}});
 
   useEffect(() => {
     loadCartItems();

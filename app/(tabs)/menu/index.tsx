@@ -81,7 +81,7 @@ export default function MenuListingScreen() {
         onPress={() => router.push('/cart')}
         style={styles.viewCartButton}
         labelStyle={styles.viewCartButtonLabel}
-        icon={() => <Ionicons name="cart-outline" size={24} color={theme.colors.onPrimary} />}
+        // icon={() => <Ionicons name="cart-outline" size={24} color={theme.colors.onPrimary} />}
       >
         View Cart
       </Button>
