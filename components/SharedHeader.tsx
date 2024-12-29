@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../styles/theme';
@@ -18,10 +18,13 @@ export default function SharedHeader({ userName }: SharedHeaderProps) {
           <Text style={styles.greeting}>Hi, {userName}</Text>
           <Text style={styles.subGreeting}>Are you hungry?</Text>
         </View>
-        <Image
+        {/* <Image
           source={{ uri: 'https://via.placeholder.com/40' }}
           style={styles.profileImage}
-        />
+        /> */}
+        <TouchableOpacity onPress={() => router.push('/cart')} style={styles.cartIconContainer}>
+          <Ionicons name="cart-outline" size={24} color={theme.colors.primary} />
+        </TouchableOpacity>
       </View>
       <View style={styles.searchContainer}>
         <Ionicons name="search" size={20} color={theme.colors.textSecondary} style={styles.searchIcon} />
@@ -77,6 +80,9 @@ const styles = StyleSheet.create({
     height: 40,
     fontSize: 16,
     color: theme.colors.textPrimary,
+  },
+  cartIconContainer: {
+    padding: theme.spacing.sm,
   },
 });
 

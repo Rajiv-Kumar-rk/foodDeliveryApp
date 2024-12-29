@@ -26,7 +26,7 @@ export default function MenuItem({ item, onAddToOrder }: MenuItemProps) {
           style={styles.button}
           labelStyle={styles.buttonLabel}
         >
-          Add to Order
+          Add to Cart
         </Button>
       </Card.Actions>
     </Card>

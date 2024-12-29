@@ -6,6 +6,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { mockMenuItems } from '../../../mockData';
 import { theme } from '../../../styles/theme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import useCustomHeader from '../../../hooks/useCustomHeader';
+
+type CartItem = {
+  _id: string;
+  name: string;
+  image: string;
+  description: string;
+  price: number;
+  quantity: number;
+};
 
 export default function ItemDetailsScreen() {
   const pathname = usePathname();
@@ -17,31 +27,7 @@ export default function ItemDetailsScreen() {
   const [quantity, setQuantity] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
 
-  const navigation = useNavigation();
-    useEffect(()=> {
-        navigation.setOptions({
-          headerShown: true,
-          title: "Item Details",
-          headerBackTitleVisible: false, 
-          // headerBackImage: () => (
-          //   <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-          // ),
-          headerLeft: () => (
-            <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginRight: theme.spacing.md, }}>
-              <Ionicons name="arrow-back" size={24} color={theme.colors.primary} />
-            </TouchableOpacity>
-          ),
-          headerStyle: {
-            backgroundColor: theme.colors.surface, 
-          },
-          headerTintColor: theme.colors.primary, 
-          headerTitleStyle: {
-            fontWeight: 'bold', 
-            fontSize: 20, 
-            color: theme.colors.textPrimary,
-          },
-        });
-      },[]);
+  useCustomHeader({title: "Item Details", showBackButton: true, onBackPress: null, customHeaderOptions:{}});
 
   useEffect(() => {
     const checkFavoriteStatus = async () => {
@@ -72,14 +58,27 @@ export default function ItemDetailsScreen() {
     setIsFavorite(!isFavorite);
   };
 
-  const addToOrder = () => {
-    // Here you would typically update your order state or send to an API
-    alert(`Added ${quantity} ${item.name}(s) to your order!`);
+  const addToCart = async () => {
+    try {
+      const cartData = await AsyncStorage.getItem('cart');
+      let cart = cartData ? JSON.parse(cartData) : [];
+      const existingItem = cart.find((cartItem: CartItem) => cartItem._id === item._id);
+      
+      if (existingItem) {
+        existingItem.quantity += quantity;
+      } else {
+        cart.push({ ...item, quantity });
+      }
+      
+      await AsyncStorage.setItem('cart', JSON.stringify(cart));
+      alert(`Added ${quantity} ${item.name}(s) to your cart!`);
+      router.back();
+    } catch (error) {
+      console.error('Error adding item to cart:', error);
+      alert('Failed to add item to cart. Please try again.');
+    }
   };
 
-  const placeOrder = () => {
-    router.push({ pathname: '/cart', params: { order: JSON.stringify([{...item, quantity}]) } });
-  };
 
   return (
     <View style={styles.container}>
@@ -107,21 +106,13 @@ export default function ItemDetailsScreen() {
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
-          <Button 
+        <Button 
             mode="contained"
-            onPress={addToOrder}
+            onPress={addToCart}
             style={styles.addButton}
             labelStyle={styles.buttonLabel}
           >
-            Add to Order
-          </Button>
-          <Button 
-            mode="contained"
-            onPress={placeOrder}
-            style={styles.orderButton}
-            labelStyle={styles.buttonLabel}
-          >
-            Place Order
+            Add to Cart
           </Button>
         </View>
       </View>
@@ -187,11 +178,6 @@ const styles = StyleSheet.create({
     flex: 1,
     marginRight: theme.spacing.sm,
     backgroundColor: theme.colors.primary,
-  },
-  orderButton: {
-    flex: 1,
-    marginLeft: theme.spacing.sm,
-    backgroundColor: theme.colors.primaryVariant,
   },
   buttonLabel: {
     color: theme.colors.onPrimary,
