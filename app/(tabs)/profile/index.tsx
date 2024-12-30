@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'react-native';
-import { useNavigation, usePathname, useRouter } from 'expo-router';
+import React from 'react';
+import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { theme } from '../../../styles/theme';
 import useCustomHeader from '../../../hooks/useCustomHeader';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 type actionButtonProps = {
   icon : string;
@@ -25,27 +26,29 @@ const ActionButton = ({ icon, label, onPress }: actionButtonProps) => (
 );
 
 export default function ProfileScreen() {
-  const pathname = usePathname();
-    console.log("profile screen> path name: ", pathname);
   const router = useRouter();
-
-  const handleLogout = () => {
-    // Implement logout logic here
-    alert('Logged out');
-  };
+  const { user, handleLogout } = useAuthContext();
 
   useCustomHeader({title: "Profile", showBackButton: false, onBackPress: null, showCartButton: false, onCartPress: ()=>router.push('/cart'), customHeaderOptions: {}});
+
+  if (!user) {
+    return (
+      <View style={styles.container}>
+        <Text>Loading user data...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.container}>
       <ScrollView>
         <View style={styles.header}>
           <Image
-            source={{ uri: 'https://via.placeholder.com/150' }}
+            source={{ uri: user?.avatar?.length ? user?.avatar : 'https://via.placeholder.com/150' }}
             style={styles.profileImage}
           />
-          <Text style={styles.name}>John Doe</Text>
-          <Text style={styles.email}>john.doe@example.com</Text>
+          <Text style={styles.name}>{(`${user?.name}`.trim().length > 0) ? `${user?.name}` : "User"}</Text>
+          <Text style={styles.email}>{user.email}</Text>
         </View>
         <View style={styles.actionButtons}>
           <View style={styles.actionRow}>
@@ -66,7 +69,6 @@ export default function ProfileScreen() {
               label="My Favorites"
               onPress={() => router.push('/favorites')}
             />
-            
             <ActionButton
               icon="cart-outline"
               label="Cart"
@@ -99,7 +101,6 @@ const styles = StyleSheet.create({
   header: {
     alignItems: 'center',
     padding: theme.spacing.xl,
-    // backgroundColor: theme.colors.surface,
     borderBottomWidth: 1,
     borderBottomColor: theme.colors.secondary,
   },
