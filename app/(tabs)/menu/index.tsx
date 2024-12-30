@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, FlatList, StyleSheet, TouchableOpacity} from 'react-native';
 import { Button } from 'react-native-paper';
 import MenuItem from '../../../components/MenuItem';
@@ -10,6 +10,7 @@ import Categories from '../../../components/Categories';
 import { theme } from '../../../styles/theme';
 import { Ionicons } from '@expo/vector-icons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useAuthContext } from '../../../contexts/AuthContext';
 
 type CartItem = {
   _id: string;
@@ -21,6 +22,10 @@ type CartItem = {
 };
 
 export default function MenuListingScreen() {
+  const { user } = useAuthContext();
+  useEffect(() => {
+      console.log("User state changed menu page:", user);  // To confirm the user state update
+    }, [user]);
   const pathname = usePathname();
     console.log("menu lisitng screen> path name: ", pathname);
 
@@ -61,7 +66,7 @@ export default function MenuListingScreen() {
 
   return (
     <View style={styles.container}>
-      <SharedHeader userName="User" />
+      <SharedHeader userName= {(`${user?.name}`.trim().length > 0) ? `${user?.name}` : "User"} />
       <Categories 
         categories={categories} 
         onCategoryChange={setSelectedCategories}
