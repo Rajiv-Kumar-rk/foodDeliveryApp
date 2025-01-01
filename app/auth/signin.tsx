@@ -1,90 +1,106 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, TextInput, TouchableOpacity, Text, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthContext } from '../../contexts/AuthContext';
 import { theme } from '../../styles/theme';
+import { TextInput, Button, Text, HelperText } from 'react-native-paper';
+import { TextInput as RNPTextInput } from 'react-native-paper';
 
 export default function SigninScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuthContext();
   const router = useRouter();
 
   const handleSignin = async () => {
+    setError('');
     try {
       setIsLoading(true);
       await login(email, password);
       router.replace('/');
     } catch (error) {
       console.error('Signin failed:', error);
-      // TODO: Show error message to user
+      setError('Invalid email or password. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <View style={styles.container}>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleSignin} disabled={isLoading}>
-        {isLoading ? (
-          <ActivityIndicator color={theme.colors.onPrimary} />
-        ) : (
-          <Text style={styles.buttonText}>Sign In</Text>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => router.push('/auth/signup')}>
-        <Text style={styles.linkText}>Don't have an account? Sign Up</Text>
-      </TouchableOpacity>
-    </View>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent}>
+        <Text style={styles.title}>Welcome Back</Text>
+        <TextInput
+          label="Email"
+          value={email}
+          onChangeText={setEmail}
+          mode="outlined"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          style={styles.input}
+        />
+        <TextInput
+          label="Password"
+          value={password}
+          onChangeText={setPassword}
+          mode="outlined"
+          secureTextEntry={!showPassword}
+          style={styles.input}
+          right={<RNPTextInput.Icon icon={showPassword ? "eye-off" : "eye"} onPress={() => setShowPassword(!showPassword)} />}
+        />
+        {error ? <HelperText type="error" visible={!!error}>{error}</HelperText> : null}
+        <Button
+          mode="contained"
+          onPress={handleSignin}
+          loading={isLoading}
+          disabled={isLoading}
+          style={styles.button}
+        >
+          Sign In
+        </Button>
+        <Button
+          mode="text"
+          onPress={() => router.push('/auth/signup')}
+          style={styles.linkButton}
+        >
+          Don't have an account? Sign Up
+        </Button>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    padding: theme.spacing.lg,
     backgroundColor: theme.colors.background,
   },
+  scrollContent: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    padding: theme.spacing.lg,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: theme.colors.primary,
+    marginBottom: theme.spacing.lg,
+    textAlign: 'center',
+  },
   input: {
-    height: 40,
-    borderColor: theme.colors.primary,
-    borderWidth: 1,
     marginBottom: theme.spacing.md,
-    paddingHorizontal: theme.spacing.sm,
-    borderRadius: 5,
   },
   button: {
-    backgroundColor: theme.colors.primary,
-    padding: theme.spacing.md,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: theme.colors.onPrimary,
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  linkText: {
-    color: theme.colors.primary,
-    textAlign: 'center',
     marginTop: theme.spacing.md,
+  },
+  linkButton: {
+    marginTop: theme.spacing.sm,
   },
 });
 
