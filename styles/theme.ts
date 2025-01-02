@@ -13,6 +13,8 @@ export const theme = {
     onError: '#FFFFFF',
     textPrimary: '#4B0082', // Indigo
     textSecondary: '#6A5ACD', // Slate Blue
+    warning: '#FFA500', // Orange color for warnings
+
   },
   spacing: {
     xs: 4,

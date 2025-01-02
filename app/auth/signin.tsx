@@ -2,28 +2,37 @@ import React, { useState } from 'react';
 import { View, StyleSheet, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { theme } from '../../styles/theme';
-import { TextInput, Button, Text, HelperText } from 'react-native-paper';
+import { TextInput, Button, Text } from 'react-native-paper';
 import { TextInput as RNPTextInput } from 'react-native-paper';
 
 export default function SigninScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const { login } = useAuthContext();
+  const { showToast } = useToast();
   const router = useRouter();
 
   const handleSignin = async () => {
-    setError('');
     try {
+      if (email?.trim().length==0) {
+        showToast("Provide email", 'info');
+        return;
+      }
+      if (password?.trim().length==0) {
+        showToast("Provide password", 'info');
+        return;
+      }
       setIsLoading(true);
       await login(email, password);
+      showToast('Logged In successfully!', 'info');
       router.replace('/');
     } catch (error) {
       console.error('Signin failed:', error);
-      setError('Invalid email or password. Please try again.');
+      showToast('Invalid email or password. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
@@ -54,7 +63,6 @@ export default function SigninScreen() {
           style={styles.input}
           right={<RNPTextInput.Icon icon={showPassword ? "eye-off" : "eye"} onPress={() => setShowPassword(!showPassword)} />}
         />
-        {error ? <HelperText type="error" visible={!!error}>{error}</HelperText> : null}
         <Button
           mode="contained"
           onPress={handleSignin}

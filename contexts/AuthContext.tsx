@@ -1,6 +1,7 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useRouter } from 'expo-router';
+import { useToast } from '../contexts/ToastContext';
 
 type User = {
   id: string;
@@ -24,6 +25,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
+  const { showToast } = useToast();
 
   useEffect(() => {
     const loadTokens = async () => {
@@ -184,12 +186,18 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       }
     } catch (error) {
       console.error('Logout error:', error);
+      throw error;
     } 
   };
 
   const handleLogout = async () => {
-    await logout();
-    router.replace('/auth/signin');
+    try {
+      await logout();
+      showToast("Logged Out Successfully!", "info");
+      router.replace('/auth/signin');
+    } catch(error) {
+      console.log("error while logging out! ", error);
+    }
   };
 
   return (
