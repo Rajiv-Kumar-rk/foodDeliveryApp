@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, StyleSheet, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuthContext } from '../../contexts/AuthContext';
+import { useToast } from '../../contexts/ToastContext';
 import { theme } from '../../styles/theme';
 import { TextInput, Button, Text, HelperText, RadioButton } from 'react-native-paper';
 import { TextInput as RNPTextInput } from 'react-native-paper';
@@ -23,24 +24,46 @@ export default function SignupScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { signup } = useAuthContext();
+  const { showToast } = useToast();
   const router = useRouter();
 
   const handleSignup = async () => {
+    if (email?.trim().length==0) {
+      setError("Provide email");
+      showToast("Provide email", 'info');
+      return;
+    }
+    if (password?.trim().length==0) {
+      setError("Provide password");
+      showToast("Provide password", 'info');
+      return;
+    }
+    if (confirmPassword?.trim().length==0) {
+      setError("Provide confirm password");
+      showToast("Provide confirm password", 'info');
+      return;
+    }
     if (password !== confirmPassword) {
       setError("Passwords don't match");
+      showToast("Passwords don't match", 'error');
       return;
     }
     setError('');
     try {
       setIsLoading(true);
       await signup(email, password, confirmPassword, role);
+      showToast('Account created successfully!', 'info');
       router.replace('/');
     } catch (error) {
       console.error('Signup failed:', error);
-      setError('Signup failed. Please try again.');
+      showToast('Signup failed. Please try again.', 'error');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleRoleChange = (value: string) => {
+    setRole(value);
   };
 
   return (
@@ -78,7 +101,7 @@ export default function SignupScreen() {
           right={<RNPTextInput.Icon icon={showConfirmPassword ? "eye-off" : "eye"} onPress={() => setShowConfirmPassword(!showConfirmPassword)} />}
         />
         <Text style={styles.roleLabel}>Role:</Text>
-        <RadioButton.Group onValueChange={value => setRole(value)} value={role}>
+        <RadioButton.Group onValueChange={handleRoleChange} value={role}>
           <View style={styles.roleContainer}>
             {roles.map((r, index) => (
               <View key={r.value} style={styles.radioItem}>
@@ -88,7 +111,6 @@ export default function SignupScreen() {
             ))}
           </View>
         </RadioButton.Group>
-        {error ? <HelperText type="error" visible={!!error}>{error}</HelperText> : null}
         <Button
           mode="contained"
           onPress={handleSignup}
